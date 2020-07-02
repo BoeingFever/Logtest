@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="10">
+    <Properties>
+        <Property name="FILEPATH">./logs</Property>
+        <Property name="ORGANIZATION_NAME">YOUR_ORGANIZATION_NAME</Property>
+        <Property name="TEAM_NAME">B2B</Property>
+        <Property name="APP_NAME">LogTest</Property>
+        <Property name="ROLLING_SIZE">80 KB</Property>
+        <Property name="DELETE_LAST_MODIFIED">5d</Property>
+        <Property name="MAX_NUMBER_OF_ARCHIVE">10000</Property>
+        <Property name="LOG_PATTERN">[%d{ISO8601_OFFSET_DATE_TIME_HHCMM}] [%highlight{%-5level}] [%method] [%style{%threadName}{bright,blue}] %style{%C{10}}{bright,yellow}: %msg%n%throwable</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" immediateFlush="false">
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout
+                    pattern="${LOG_PATTERN}" />
+        </Console>
+
+        <!-- RollingRandomAccessFile performance >>> RollingFile (20-200% ?) -->
+
+        <RollingRandomAccessFile name="ALLAppender"
+                     fileName="${FILEPATH}/${APP_NAME}-all.json"
+                     filePattern="${FILEPATH}/%d{yyyy-MM}/${TEAM_NAME}-${APP_NAME}-all-%d{yyyy-MM-dd}-%i.json" immediateFlush="false">
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <JsonLayout complete="false" compact="true" eventEol="true" locationInfo="true" stacktraceAsString="true">
+                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSS+0800}" />
+                 <KeyValuePair key="appName" value="${APP_NAME}" />
+            </JsonLayout>
+<!--            <PatternLayout>-->
+<!--                <pattern>${LOG_PATTERN}</pattern>-->
+<!--            </PatternLayout>-->
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches {ROLLING_SIZE} -->
+                <!--<OnStartupTriggeringPolicy />-->
+                <SizeBasedTriggeringPolicy size="${ROLLING_SIZE}" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${FILEPATH}" maxDepth="2">
+                    <IfFileName glob="*/*-all*.json" />
+                        <IfAccumulatedFileSize exceeds="200 KB"/>
+                    <!--                        <IfLastModified age="${DELETE_LAST_MODIFIED}" />-->
+
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="HelloController"
+                     fileName="${FILEPATH}/${APP_NAME}-HelloController.log"
+                     filePattern="${FILEPATH}/%d{yyyy-MM}/${TEAM_NAME}-${APP_NAME}-HelloController-%d{yyyy-MM-dd}-%i.log">
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches {ROLLING_SIZE} -->
+                <!--<OnStartupTriggeringPolicy />-->
+                <SizeBasedTriggeringPolicy size="${ROLLING_SIZE}" />
+                <TimeBasedTriggeringPolicy modulate="false"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="nomax">
+                <Delete basePath="${FILEPATH}" maxDepth="2">
+                    <IfFileName glob="*/*-HelloController*.log" />
+                        <IfLastModified age="${DELETE_LAST_MODIFIED}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="APIHandler"
+                     fileName="${FILEPATH}/${APP_NAME}-APIHandler.log"
+                     filePattern="${FILEPATH}/%d{yyyy-MM}/${TEAM_NAME}-${APP_NAME}-APIHandler-%d{yyyy-MM-dd}-%i.log">
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches {ROLLING_SIZE} -->
+                <!--<OnStartupTriggeringPolicy />-->
+                <SizeBasedTriggeringPolicy size="${ROLLING_SIZE}" />
+                <TimeBasedTriggeringPolicy modulate="false"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="nomax">
+                <Delete basePath="${FILEPATH}" maxDepth="2">
+                    <IfFileName glob="*/*-APIHandler*.log" />
+                        <IfLastModified age="${DELETE_LAST_MODIFIED}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="QueryHandler"
+                     fileName="${FILEPATH}/${APP_NAME}-QueryHandler.log"
+                     filePattern="${FILEPATH}/%d{yyyy-MM}/${TEAM_NAME}-${APP_NAME}-QueryHandler-%d{yyyy-MM-dd}-%i.log">
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover on startup, daily and when the file reaches {ROLLING_SIZE} -->
+                <!--<OnStartupTriggeringPolicy />-->
+                <SizeBasedTriggeringPolicy size="${ROLLING_SIZE}" />
+                <TimeBasedTriggeringPolicy modulate="false"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="nomax">
+                <Delete basePath="${FILEPATH}" maxDepth="2">
+                    <IfFileName glob="*/*-QueryHandler*.log" />
+                        <IfLastModified age="${DELETE_LAST_MODIFIED}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+<!--        <RollingRandomAccessFile name="GeneralErrorAppender"-->
+<!--                     fileName="${FILEPATH}/${APP_NAME}-error.log"-->
+<!--                     filePattern="${FILEPATH}/%d{yyyy-MM}/${TEAM_NAME}-${APP_NAME}-error-%d{yyyy-MM-dd}-%i.log">-->
+<!--            &lt;!&ndash;<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>&ndash;&gt;-->
+<!--            <PatternLayout>-->
+<!--                <pattern>${LOG_PATTERN}</pattern>-->
+<!--            </PatternLayout>-->
+<!--            <Policies>-->
+<!--                &lt;!&ndash; rollover on startup, daily and when the file reaches {ROLLING_SIZE} &ndash;&gt;-->
+<!--                &lt;!&ndash;<OnStartupTriggeringPolicy />&ndash;&gt;-->
+<!--                <SizeBasedTriggeringPolicy size="${ROLLING_SIZE}" />-->
+<!--                <TimeBasedTriggeringPolicy modulate="false"/>-->
+<!--            </Policies>-->
+<!--            <DefaultRolloverStrategy fileIndex="nomax">-->
+<!--                <Delete basePath="${FILEPATH}" maxDepth="2">-->
+<!--                    <IfFileName glob="*/*-error*.log" />-->
+<!--                        <IfLastModified age="${DELETE_LAST_MODIFIED}" />-->
+<!--                </Delete>-->
+<!--            </DefaultRolloverStrategy>-->
+<!--        </RollingRandomAccessFile>-->
+    </Appenders>
+
+    <Loggers>
+        <!-- Custom Logger -->
+        <!-- <Logger name="com.csjack.LogTesting.APIHandler.QueryHandler" level="debug" additivity="true">
+	        <AppenderRef ref="QueryHandler" />
+	    </Logger> -->
+
+        <!-- <Logger name="com.csjack.LogTesting.APIHandler" level="debug" additivity="true">
+	        <AppenderRef ref="APIHandler" />
+	    </Logger> -->
+        
+        <!-- additivity="false" such that parent logger won't show child's logs -->
+        <!-- <Logger name="com.csjack.LogTesting.Controller.HelloController" level="debug" additivity="true">
+	        <AppenderRef ref="HelloController" />
+	    </Logger> -->
+
+        <AsyncRoot level="trace" includeLocation="true">
+            <AppenderRef ref="Console" level="${sys:logLevel}" />
+            <AppenderRef ref="ALLAppender" level="info"/>
+<!--            <AppenderRef ref="GeneralErrorAppender" level="warn"/>-->
+        </AsyncRoot>
+
+    </Loggers>
+
+</Configuration>
