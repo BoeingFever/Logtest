@@ -133,11 +133,11 @@
 
     <Loggers>
         <!-- Custom Logger -->
-        <!-- <Logger name="com.csjack.LogTesting.APIHandler.QueryHandler" level="debug" additivity="true">
+        <!-- <Logger name="com.csjack.LogTesting.Service.QueryHandler" level="debug" additivity="true">
 	        <AppenderRef ref="QueryHandler" />
 	    </Logger> -->
 
-        <!-- <Logger name="com.csjack.LogTesting.APIHandler" level="debug" additivity="true">
+        <!-- <Logger name="com.csjack.LogTesting.Service" level="debug" additivity="true">
 	        <AppenderRef ref="APIHandler" />
 	    </Logger> -->
         

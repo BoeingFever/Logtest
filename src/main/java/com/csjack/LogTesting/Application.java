@@ -52,6 +52,7 @@ public class Application {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(testmap);
             log.info(json);
+            log.info(System.getProperty("java.class.path"));
 //            String[] beanNames = ctx.getBeanDefinitionNames();
 //            Arrays.sort(beanNames);
 //            for (String beanName : beanNames) {

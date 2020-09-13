@@ -2,11 +2,12 @@ package com.csjack.LogTesting.DB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+@Service
 public class DBManager {
     private static final Logger logger = LoggerFactory.getLogger(DBManager.class);
 
@@ -32,6 +33,10 @@ public class DBManager {
 
         logger.trace("method exit");
         return 0;
+    }
+
+    public String dummySelect(String SCAC, String convertTypeId, String TP_ID){
+        return SCAC;
     }
 
     public String selectRecord(String SCAC, String convertTypeId, String TP_ID) throws SQLException, NullPointerException {
