@@ -3,9 +3,8 @@ package com.csjack.LogTesting.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class ApiHandler {
-    private static final Logger logger = LoggerFactory.getLogger(ApiHandler.class);
-
-    abstract public void HelloWorld();
-    abstract public Integer toDivide(int dividend, int divisor);
+public interface ApiHandler {
+    public void HelloWorld();
+    public Integer toDivide(int dividend, int divisor);
+    public String selectRecord(String SCAC, String convertTypeId, String TP_ID);
 }

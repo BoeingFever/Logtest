@@ -1,5 +1,6 @@
 package com.csjack.LogTesting;
 
+import com.csjack.LogTesting.Bean.TestBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 @SpringBootApplication
@@ -32,7 +34,7 @@ public class Application {
             app.run(args);
             log.info("random");
         } catch(Throwable e){
-            //logger.error(fatal, "Critical Problem occured", e);
+            //logger.error(fatal, "Critical Problem occurred", e);
             log.trace("app main exited");
         }
     }
@@ -53,13 +55,27 @@ public class Application {
             String json = objectMapper.writeValueAsString(testmap);
             log.info(json);
             log.info(System.getProperty("java.class.path"));
+            checkBeansPresence(ctx, "QueryHandler", "DBManager", "TESTB", "testBean");
+
+            TestBean tb = (TestBean) ctx.getBean("testBean");
+            tb.sayHello();
+            System.out.println(tb);
+
+            TestBean tb2 = (TestBean) ctx.getBean("testBean");
+            tb2.sayHello();
+            System.out.println(tb2);
 //            String[] beanNames = ctx.getBeanDefinitionNames();
 //            Arrays.sort(beanNames);
 //            for (String beanName : beanNames) {
-//                logger.info(beanName);
+//                log.info(beanName);
 //            }
-
         };
     }
 
+    private void checkBeansPresence(ApplicationContext ctx, String... beans) {
+        for (String beanName : beans) {
+            log.info("Is {} in ApplicationContext: {}",
+                    beanName,ctx.containsBean(beanName));
+        }
+    }
 }

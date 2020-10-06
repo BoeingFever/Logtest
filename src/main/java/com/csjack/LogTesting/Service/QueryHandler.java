@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class QueryHandler extends ApiHandler{
+@Service("QueryHandler")
+public class QueryHandler implements ApiHandler{
     private static final Logger logger = LoggerFactory.getLogger(QueryHandler.class);
     @Autowired
     private DBManager myDBmanager;
@@ -15,7 +15,7 @@ public class QueryHandler extends ApiHandler{
     public void HelloWorld(){
         logger.trace("method entry");
 
-        logger.trace("name of this logger is {}", logger.getName());
+        logger.info("Helloworld name of this logger is {}", logger.getName());
 
         logger.trace("method exit");
     }
