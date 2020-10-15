@@ -2,6 +2,7 @@ package com.csjack.LogTesting;
 
 import com.csjack.LogTesting.Bean.TestBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
+
 import java.util.Collections;
 import java.util.HashMap;
+@Slf4j
 @SpringBootApplication
 public class Application {
 
     static Marker fatal = MarkerFactory.getMarker("FATAL");
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    //private static final Logger log = LoggerFactory.getLogger(Application.class);
     //private static final Logger log = LogManager.getLogger();
 
     public static void main(String[] args) {
@@ -58,11 +60,11 @@ public class Application {
             checkBeansPresence(ctx, "QueryHandler", "DBManager", "TESTB", "testBean");
 
             TestBean tb = (TestBean) ctx.getBean("testBean");
-            tb.sayHello();
+            tb.sayHello(tb.mycallback());
             System.out.println(tb);
 
             TestBean tb2 = (TestBean) ctx.getBean("testBean");
-            tb2.sayHello();
+            tb2.sayHello(tb.mycallback());
             System.out.println(tb2);
 //            String[] beanNames = ctx.getBeanDefinitionNames();
 //            Arrays.sort(beanNames);

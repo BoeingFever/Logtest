@@ -1,50 +1,49 @@
 package com.csjack.LogTesting.Service;
 
 import com.csjack.LogTesting.DB.DBManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service("QueryHandler")
 public class QueryHandler implements ApiHandler{
-    private static final Logger logger = LoggerFactory.getLogger(QueryHandler.class);
+//    private static final Logger log = LoggerFactory.getLogger(QueryHandler.class);
     @Autowired
     private DBManager myDBmanager;
 
     public void HelloWorld(){
-        logger.trace("method entry");
+        log.trace("method entry");
 
-        logger.info("Helloworld name of this logger is {}", logger.getName());
+        log.info("Helloworld name of this log is {}", log.getName());
 
-        logger.trace("method exit");
+        log.trace("method exit");
     }
 
     public String selectRecord(String SCAC, String convertTypeId, String TP_ID){
-        logger.trace("method entry");
+        log.trace("method entry");
         String ext_cde = null;
         try {
-            logger.info("why select record method can't show error logs");
+            log.info("why select record method can't show error logs");
             ext_cde = myDBmanager.dummySelect(SCAC, convertTypeId, TP_ID);
         } catch (NullPointerException ex){
-            logger.error("abc",ex);
+            log.error("abc",ex);
         }
-        logger.trace("method exit");
+        log.trace("method exit");
         return ext_cde;
     }
 
     public Integer toDivide(int dividend, int divisor){
-        logger.trace("method entry");
+        log.trace("method entry");
         try {
             Integer result = dividend / divisor;
-            logger.debug("division result is {}", result);
+            log.debug("division result is {}", result);
 
-            logger.trace("method exit");
+            log.trace("method exit");
             return result;
         } catch (ArithmeticException ex) {
-            logger.error("division {} / {} failed due to", dividend, divisor, ex);
+            log.error("division {} / {} failed due to", dividend, divisor, ex);
 
-            logger.trace("method exit");
+            log.trace("method exit");
             return null;
         }
     }

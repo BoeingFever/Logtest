@@ -1,37 +1,37 @@
 package com.csjack.LogTesting.DB;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+@Slf4j
 @Service
 public class DBManager {
-    private static final Logger logger = LoggerFactory.getLogger(DBManager.class);
+    //private static final Logger log = LoggerFactory.getLogger(DBManager.class);
 
     public DBManager(){
-        logger.trace("constructor entry");
+        log.trace("constructor entry");
         getConnection();
-        logger.trace("constructor exit");
+        log.trace("constructor exit");
     }
 
     private Integer getConnection(){
-        logger.trace("method entry");
+        log.trace("method entry");
 
-        logger.info("DB connected");
+        log.info("DB connected");
 
-        logger.trace("method exit");
+        log.trace("method exit");
         return 0;
     }
 
     public Integer Disconnect(){
-        logger.trace("method entry");
+        log.trace("method entry");
 
-        logger.info("DB disconnected");
+        log.info("DB disconnected");
 
-        logger.trace("method exit");
+        log.trace("method exit");
         return 0;
     }
 
@@ -40,8 +40,8 @@ public class DBManager {
     }
 
     public String selectRecord(String SCAC, String convertTypeId, String TP_ID) throws SQLException, NullPointerException {
-        logger.trace("method entry");
-        logger.debug("SCAC {}, convertTypeId {}, TP_ID {}", SCAC, convertTypeId, TP_ID);
+        log.trace("method entry");
+        log.debug("SCAC {}, convertTypeId {}, TP_ID {}", SCAC, convertTypeId, TP_ID);
 
         String sql = "select ext_cde from b2b_edi_cde_ref where convert_type_id =? and tp_id =? and scac = ?";
         PreparedStatement pre = null;
@@ -57,10 +57,10 @@ public class DBManager {
                 ext_cde = result.getString(1);
             }
         } catch (SQLException ex) {
-            //logger.error("Exception with parameters SCAC {}, convertTypeId {}, TP_ID {} and SQL {}", SCAC, convertTypeId, TP_ID, sql);
+            //log.error("Exception with parameters SCAC {}, convertTypeId {}, TP_ID {} and SQL {}", SCAC, convertTypeId, TP_ID, sql);
             throw ex;
         } catch (NullPointerException ex) {
-            //logger.error("Exception with parameters SCAC {}, convertTypeId {}, TP_ID {} and SQL {}", SCAC, convertTypeId, TP_ID, sql);
+            //log.error("Exception with parameters SCAC {}, convertTypeId {}, TP_ID {} and SQL {}", SCAC, convertTypeId, TP_ID, sql);
             throw ex;
         } finally {
             if(pre != null){
@@ -70,8 +70,8 @@ public class DBManager {
                 result.close();
             }
         }
-        logger.debug("the result ext_cde to return is {}", ext_cde);
-        logger.trace("method exit");
+        log.debug("the result ext_cde to return is {}", ext_cde);
+        log.trace("method exit");
         return ext_cde;
     }
 }
