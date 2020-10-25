@@ -1,0 +1,16 @@
+server:
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: C:/Users/kakit/Documents/CodeProject/LogTest/logs/accesslogs
+      suffix: .log
+      prefix: logtest-accesslog
+      file-date-format: -yyyy-MM-dd
+
+default: 
+  loglevel: error
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method

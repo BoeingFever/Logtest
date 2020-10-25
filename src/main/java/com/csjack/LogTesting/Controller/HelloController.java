@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Slf4j
 @RestController
 @RequestMapping("/")
@@ -63,8 +66,26 @@ public class HelloController {
         return returnStr;
     }
 
+    @GetMapping(value = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HashMap getCustomer(@RequestParam(value = "search") String search) {
+
+        // using a certain regex to match the input string, the regex needed to be compiled into object in advance
+        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+
+        // use the regex object to match our input string, load the input into the matcher, then we can do whatever we want in the next step
+        Matcher matcher = pattern.matcher(search + ",");
+        log.info("fetching each key/value pair within the single request param \"search\" ");
+        while(matcher.find()){
+            log.info(matcher.group());
+        }
+        HashMap<String, String> result = new HashMap<String, String>();
+        result.put("status", "ok");
+
+        return result;
+    }
 //    @RequestMapping(value = "/post", method = RequestMethod.POST)
-    @PostMapping(value = "/post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/greeting", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
     public HashMap createDummy(@RequestBody Map<String, String> body){
         log.trace("method entry");
 
