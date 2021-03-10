@@ -13,12 +13,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 
 import java.util.Collections;
 import java.util.HashMap;
 @Slf4j
 @SpringBootApplication
+//@PropertySource("classpath:application.yml")
 public class Application {
 
     static Marker fatal = MarkerFactory.getMarker("FATAL");
@@ -28,12 +30,11 @@ public class Application {
 
     public static void main(String[] args) {
         //SpringApplication.run(Application.class, args);
-        System.setProperty("logLevel", "info");
         try{
-            SpringApplication app = new SpringApplication(Application.class);
-            app.setDefaultProperties(Collections
-                    .singletonMap("server.port", "8083"));
-            app.run(args);
+//            SpringApplication app = new SpringApplication(Application.class);
+//            app.setDefaultProperties(Collections.singletonMap("server.port", "8083"));
+//            app.run(args);
+            SpringApplication.run(Application.class, args);
             log.info("random");
         } catch(Throwable e){
             //logger.error(fatal, "Critical Problem occurred", e);
@@ -66,6 +67,7 @@ public class Application {
             TestBean tb2 = (TestBean) ctx.getBean("testBean");
             tb2.sayHello(tb.mycallback());
             System.out.println(tb2);
+            System.out.println("username " + tb2.getUsername() + " resourcesPath "+ tb2.getResourcesPath());
 //            String[] beanNames = ctx.getBeanDefinitionNames();
 //            Arrays.sort(beanNames);
 //            for (String beanName : beanNames) {

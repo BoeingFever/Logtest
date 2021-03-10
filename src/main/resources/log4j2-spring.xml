@@ -146,8 +146,9 @@
 	        <AppenderRef ref="HelloController" />
 	    </Logger> -->
 
-        <AsyncRoot level="trace" includeLocation="true">
-            <AppenderRef ref="Console" level="${sys:logLevel}" />
+        <AsyncRoot level="debug" includeLocation="true">
+<!--            <AppenderRef ref="Console" level="${sys:logLevel}" />-->
+            <AppenderRef ref="Console" level="info" />
             <AppenderRef ref="ALLAppender" level="info"/>
 <!--            <AppenderRef ref="GeneralErrorAppender" level="warn"/>-->
         </AsyncRoot>

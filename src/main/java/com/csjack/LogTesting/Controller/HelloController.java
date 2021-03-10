@@ -1,5 +1,6 @@
 package com.csjack.LogTesting.Controller;
 
+import com.csjack.LogTesting.Bean.TestBean;
 import com.csjack.LogTesting.Service.ApiHandler;
 import com.csjack.LogTesting.Service.QueryHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,10 @@ public class HelloController {
     @Autowired
     @Qualifier("QueryHandler")
     private ApiHandler myhandler;
+
+    @Autowired
+    @Qualifier("testBean")
+    private TestBean testBean;
 
     public class TESTB{
         Integer ab;
@@ -66,6 +72,8 @@ public class HelloController {
         return returnStr;
     }
 
+    // sample query url : localhost:8083/customers?search=lastName:doe,age>25
+    // this controller method try
     @GetMapping(value = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
     public HashMap getCustomer(@RequestParam(value = "search") String search) {
 
@@ -83,10 +91,98 @@ public class HelloController {
 
         return result;
     }
+
+    @GetMapping(value = "/javatime", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HashMap getJavaTimeTest() {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        //Current Date
+        try{
+            LocalDate today = LocalDate.now();
+            log.info("Current Date= {} ", today);
+
+            //Creating LocalDate by providing input arguments
+            LocalDate firstDay_2014 = LocalDate.of(2020, Month.JANUARY, 5);
+            log.info("Specific Date= {}", firstDay_2014);
+
+            //Try creating date by providing invalid inputs
+            //LocalDate feb29_2014 = LocalDate.of(2014, Month.FEBRUARY, 29);
+            //Exception in thread "main" java.time.DateTimeException:
+            //Invalid date 'February 29' as '2014' is not a leap year
+
+            //Current date in "Asia/Kolkata", you can get it from ZoneId javadoc
+            LocalDate todayKolkata = LocalDate.now(ZoneId.of("Asia/Kolkata"));
+            System.out.println("Current Date in IST="+todayKolkata);
+
+            //java.time.zone.ZoneRulesException: Unknown time-zone ID: IST
+            //LocalDate todayIST = LocalDate.now(ZoneId.of("IST"));
+
+            //Getting date from the base date i.e 01/01/1970
+            LocalDate dateFromBase = LocalDate.ofEpochDay(365);
+            System.out.println("365th day from base date= "+dateFromBase);
+
+            LocalDate hundredDay2014 = LocalDate.ofYearDay(2014, 100);
+            System.out.println("100th day of 2014="+hundredDay2014);
+
+            //Current Time
+            LocalTime time = LocalTime.now();
+            System.out.println("Current Time="+time);
+
+            //Creating LocalTime by providing input arguments
+            LocalTime specificTime = LocalTime.of(12,20,25,40);
+            System.out.println("Specific Time of Day="+specificTime);
+
+
+            //Try creating time by providing invalid inputs
+            //LocalTime invalidTime = LocalTime.of(25,20);
+            //Exception in thread "main" java.time.DateTimeException:
+            //Invalid value for HourOfDay (valid values 0 - 23): 25
+
+            //Current date in "Asia/Kolkata", you can get it from ZoneId javadoc
+            LocalTime timeKolkata = LocalTime.now(ZoneId.of("Asia/Kolkata"));
+            System.out.println("Current Time in IST="+timeKolkata);
+
+            //java.time.zone.ZoneRulesException: Unknown time-zone ID: IST
+            //LocalTime todayIST = LocalTime.now(ZoneId.of("IST"));
+
+            //Getting date from the base date i.e 01/01/1970
+            LocalTime specificSecondTime = LocalTime.ofSecondOfDay(10000);
+            System.out.println("10000th second from 01/01/1970 00:00:00 = "+specificSecondTime);
+
+            //Current date in "Asia/Kolkata", you can get it from ZoneId javadoc
+            LocalDateTime todayKolkata_LDT = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+            System.out.println("Current Local Date Time in IST="+todayKolkata_LDT);
+
+            //java.time.zone.ZoneRulesException: Unknown time-zone ID: IST
+            //LocalDateTime todayIST = LocalDateTime.now(ZoneId.of("IST"));
+
+            //Getting date from the base date i.e 01/01/1970
+            LocalDateTime dateFromBase_LDT = LocalDateTime.ofEpochSecond(10000, 0, ZoneOffset.UTC);
+            System.out.println("10000th second Local Date Time from 01/01/1970= "+dateFromBase_LDT);
+
+            //Instant class is used to work with machine readable time format, it stores date time in unix timestamp. Let’s see it’s usage with a simple program.
+            //Current timestamp
+            Instant timestamp = Instant.now();
+            System.out.println("Current Timestamp = "+timestamp);
+
+            //Instant from timestamp
+            Instant specificTimestamp = Instant.ofEpochMilli(timestamp.toEpochMilli());
+            System.out.println("Specific Time = "+specificTimestamp);
+
+            //Duration example
+            Duration thirtyDay = Duration.ofDays(30);
+            System.out.println(thirtyDay);
+            
+        }catch(Exception ex){
+            log.error(ex.getMessage(),ex);
+            result.put("errormsg", ex.getMessage());
+        }
+        return result;
+    }
+
 //    @RequestMapping(value = "/post", method = RequestMethod.POST)
     @PostMapping(value = "/greeting", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody
-    public HashMap createDummy(@RequestBody Map<String, String> body){
+    public TestBean createDummy(@RequestBody Map<String, String> body){
         log.trace("method entry");
 
         String SCAC = body.get("SCAC");
@@ -100,13 +196,16 @@ public class HelloController {
 
         myhandler.selectRecord(SCAC, convertTypeId, TP_ID);
 
-        HashMap<String, String> result = new HashMap<String, String>();
-        result.put("say", "S");
-        result.put("it", "T");
-        result.put("loud", "D");
+//        HashMap<String, String> result = new HashMap<String, String>();
+//        result.put("say", "S");
+//        result.put("it", "T");
+//        result.put("loud", "D");
 
-        log.info("Result to return : {}", result.toString());
+//        log.info("Result to return : {}", result.toString());
+
+        //
+        log.info("Result to return : {}", testBean.toString());
         log.trace("method exit");
-        return result;
+        return testBean;
     }
 }

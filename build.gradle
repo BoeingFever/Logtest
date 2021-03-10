@@ -28,7 +28,7 @@ dependencies {
 	implementation ('org.springframework.boot:spring-boot-starter-web') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
-	
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation group: 'com.lmax', name: 'disruptor', version: '3.4.0'
 	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
