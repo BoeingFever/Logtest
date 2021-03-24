@@ -1,7 +1,11 @@
 package com.csjack.LogTesting.Controller;
 
 import com.csjack.LogTesting.Bean.TestBean;
+import com.csjack.LogTesting.Models.AuthenticationRequest;
+import com.csjack.LogTesting.Models.AuthenticationResponse;
+import com.csjack.LogTesting.Security.JWTUtil;
 import com.csjack.LogTesting.Service.ApiHandler;
+import com.csjack.LogTesting.Service.MyUserDetailsService;
 import com.csjack.LogTesting.Service.QueryHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -10,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
@@ -30,6 +40,14 @@ public class HelloController {
     private ApiHandler myhandler;
 
     @Autowired
+    private AuthenticationManager authManager;
+    @Autowired
+    private JWTUtil jwtUtil;
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
+
+    @Autowired
     @Qualifier("testBean")
     private TestBean testBean;
 
@@ -42,6 +60,29 @@ public class HelloController {
     public String initialize(){
         myhandler.HelloWorld();
         return "initialized";
+    }
+
+    // now since we added spring security dependency to this project
+    // spring require us to pass authentication even before calling this authenticate method
+    // which is ridiculous, so we need to let spring skip this method
+    // take a look at SecurityConfigurer class, we override a method to skip this method
+    @PostMapping(value= "/authenticate")
+    public ResponseEntity createAuthKey(@RequestBody AuthenticationRequest authreq) throws Exception{
+
+        // do the authentication first
+        try{
+            authManager.authenticate(new UsernamePasswordAuthenticationToken(authreq.getUsername(),authreq.getPassword()));
+        }catch (BadCredentialsException e){
+            throw new Exception("Incorrect username & password",e);
+        }
+
+        // after authentication done, now to generate jwt token and return it to client
+
+        UserDetails ud = myUserDetailsService.loadUserByUsername(authreq.getUsername());
+
+        String myJwt = jwtUtil.generateToken(ud);
+
+        return ResponseEntity.ok(new AuthenticationResponse(myJwt));
     }
 
     @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -4,6 +4,9 @@ import com.csjack.LogTesting.DB.DBManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
 @Slf4j
 @Service("QueryHandler")
 public class QueryHandler implements ApiHandler{
@@ -13,7 +16,7 @@ public class QueryHandler implements ApiHandler{
 
     public void HelloWorld(){
         log.trace("method entry");
-
+        Collections.emptyList();
         log.info("Helloworld name of this log is {}", log.getName());
 
         log.trace("method exit");
