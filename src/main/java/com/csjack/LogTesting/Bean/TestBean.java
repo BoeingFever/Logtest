@@ -1,11 +1,6 @@
 package com.csjack.LogTesting.Bean;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.util.Map;
-@Data
-@Builder
 public class TestBean {
     private String username;
     private Map<String, String> resourcesPath;
@@ -27,6 +22,14 @@ public class TestBean {
 
     public Map<String, String> getResourcesPath() {
         return resourcesPath;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setResourcesPath(Map<String, String> resourcesPath) {
