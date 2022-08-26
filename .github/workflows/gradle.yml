@@ -20,6 +20,7 @@ jobs:
       uses: actions/setup-java@v3.4.1
       with:
         java-version: 11.0.8
+        distribution: microsoft
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
